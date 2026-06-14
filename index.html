@@ -15,48 +15,41 @@
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23211A14'/><text x='16' y='22' font-size='17' font-family='serif' fill='%23C8962A' text-anchor='middle'>봉</text></svg>" />
 
-<!-- 폰트 1종(제목용 명조). 본문은 시스템 폰트. 외부 요청을 0으로 하려면 이 3줄 삭제 -->
+<!-- 폰트 1종(제목용 명조). 본문은 시스템 폰트. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet" />
 
 <style>
   :root{
-    --espresso:#211A14;   /* 다크 웜톤 (히어로·푸터) */
-    --espresso-2:#2B2018;
-    --ivory:#F5F0E8;      /* 본문 배경 */
-    --cream:#FBF7EF;      /* 카드 */
-    --gold:#C8962A;       /* 메인 액센트(고급) */
-    --gold-2:#A87C1E;
-    --orange:#EA7317;     /* 액션 포인트 — 1~2곳만 */
-    --orange-deep:#D5650F;
-    --ink:#241D16;        /* 본문 글씨 */
-    --muted:#7C6F5D;      /* 보조 글씨 */
-    --line:#E6DBC6;       /* 옅은 구분선 */
-    --on-dark:#EDE6D8;    /* 다크 위 글씨 */
-    --radius:14px;
-    --dock-h:66px;
+    --espresso:#211A14; --espresso-2:#2B2018;
+    --ivory:#F5F0E8; --cream:#FBF7EF;
+    --gold:#C8962A; --gold-2:#A87C1E;
+    --orange:#EA7317; --orange-deep:#D5650F;
+    --ink:#241D16; --muted:#7C6F5D; --line:#E6DBC6; --on-dark:#EDE6D8;
+    --radius:14px; --dock-h:66px;
     --serif:"Nanum Myeongjo","Nanum Myeongjo OTF",Georgia,"Apple SD Gothic Neo",serif;
     --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{
-    font-family:var(--sans);color:var(--ink);background:var(--ivory);line-height:1.72;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:calc(var(--dock-h) + env(safe-area-inset-bottom) + 6px);
-  }
+  body{font-family:var(--sans);color:var(--ink);background:var(--ivory);line-height:1.72;
+    -webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + env(safe-area-inset-bottom) + 6px)}
   img{max-width:100%;display:block}
   a{color:inherit;text-decoration:none}
-
   .wrap{max-width:480px;margin:0 auto;background:var(--ivory);position:relative}
   @media (min-width:600px){ .wrap{box-shadow:0 0 80px rgba(33,26,20,.18)} }
 
-  /* 아이콘 */
   .ico{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-  /* 섹션 공통 */
+  /* 언어 선택 바 */
+  .langbar{position:fixed;top:calc(env(safe-area-inset-top) + 10px);right:12px;z-index:60;display:flex;gap:1px;
+    background:rgba(25,18,11,.6);backdrop-filter:blur(8px);border:1px solid rgba(200,150,42,.4);border-radius:100px;padding:3px}
+  .langbar button{font-family:var(--sans);font-size:11px;font-weight:700;color:var(--on-dark);background:none;border:none;
+    cursor:pointer;padding:6px 9px;border-radius:100px;line-height:1;opacity:.62;transition:opacity .15s,background .15s}
+  .langbar button.active{background:var(--gold);color:#23190c;opacity:1}
+
   section{padding:46px 24px}
   .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:11.5px;font-weight:700;
     letter-spacing:.22em;color:var(--gold);margin-bottom:14px}
@@ -65,7 +58,6 @@
     line-height:1.3;margin-bottom:18px;color:var(--ink)}
   .lead{color:#5c5142;font-size:15.5px}
 
-  /* 버튼 */
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
     font-size:15.5px;font-weight:700;line-height:1;cursor:pointer;width:100%;min-height:52px;
     padding:16px 20px;border-radius:var(--radius);border:1.5px solid transparent;
@@ -82,34 +74,25 @@
   .btn-soft:hover{border-color:var(--gold)}
   .btn-row{display:flex;gap:10px}
   .btn-row .btn{width:auto;flex:1}
+  .nav-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
-  /* ===== 히어로 (다크 · 미디어 없어도 고급) ===== */
+  /* 히어로 */
   .hero{position:relative;min-height:90svh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:64px 26px;overflow:hidden;
-    color:var(--on-dark);
-    background:
-      radial-gradient(125% 85% at 50% 8%, #3C2C1D 0%, #261D14 52%, #191007 100%);
-  }
-  .hero::before{ /* 윗쪽 은은한 스포트라이트 */
-    content:"";position:absolute;left:50%;top:-12%;width:130%;height:55%;transform:translateX(-50%);
+    align-items:center;justify-content:center;text-align:center;padding:64px 26px;overflow:hidden;color:var(--on-dark);
+    background:radial-gradient(125% 85% at 50% 8%, #3C2C1D 0%, #261D14 52%, #191007 100%)}
+  .hero::before{content:"";position:absolute;left:50%;top:-12%;width:130%;height:55%;transform:translateX(-50%);
     background:radial-gradient(closest-side, rgba(200,150,42,.18), transparent 70%);pointer-events:none}
-  /* 교체: 사진/영상 배경 — 아래 주석 해제 + src 교체, <section class="hero"> → class="hero photo"
-  <div class="hero-media" aria-hidden="true">
-    이미지: <img src="hero.jpg" alt="" />
-    영상:   <video autoplay muted loop playsinline poster="poster.jpg"><source src="hero.mp4" type="video/mp4"></video>
-  </div> */
   .hero-media{position:absolute;inset:0;z-index:0}
   .hero-media img,.hero-media video{width:100%;height:100%;object-fit:cover}
   .hero.photo::after{content:"";position:absolute;inset:0;z-index:1;
     background:linear-gradient(180deg,rgba(20,14,8,.35),rgba(20,14,8,.74))}
   .hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
-  .badge{font-size:11.5px;font-weight:700;letter-spacing:.2em;color:var(--gold);
+  .badge{font-size:11.5px;font-weight:700;letter-spacing:.16em;color:var(--gold);
     padding:7px 16px;border:1px solid rgba(200,150,42,.45);border-radius:100px;margin-bottom:26px}
-  .wordmark{font-family:var(--serif);font-weight:800;font-size:clamp(58px,21vw,92px);
+  .wordmark{font-family:var(--serif);font-weight:800;font-size:clamp(54px,20vw,92px);
     line-height:.98;letter-spacing:.04em;color:#F3ECDD;text-shadow:0 2px 30px rgba(0,0,0,.4)}
   .hero-logo{display:block;width:min(270px,78vw);height:auto;margin:2px 0;
-    background:#F8F2E7;padding:16px 20px;border-radius:18px;
-    box-shadow:0 16px 44px -14px rgba(0,0,0,.55)}
+    background:#F8F2E7;padding:16px 20px;border-radius:18px;box-shadow:0 16px 44px -14px rgba(0,0,0,.55)}
   .rule{width:46px;height:2px;background:var(--gold);margin:22px 0 20px;border-radius:2px}
   .tagline{font-family:var(--serif);font-size:clamp(17px,4.8vw,21px);font-weight:700;
     color:#E7DCC8;margin-bottom:34px;line-height:1.6}
@@ -120,7 +103,7 @@
   @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
   @media (prefers-reduced-motion:reduce){.scroll-cue{animation:none}}
 
-  /* ===== 소개 + 강점 ===== */
+  /* 소개 + 강점 */
   #about{padding-top:48px}
   .points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
   .point{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);
@@ -128,33 +111,30 @@
   .point .ic{color:var(--gold);font-size:30px;margin:0 auto 12px}
   .point b{display:block;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.5}
 
-  /* ===== 위치 ===== */
+  /* 위치 */
   .addr{font-family:var(--serif);font-size:18px;font-weight:700;margin-bottom:5px}
   .addr-sub{color:var(--muted);font-size:13.5px;margin-bottom:14px;line-height:1.6}
   .copy-addr{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--gold);
     font-weight:700;background:none;border:none;cursor:pointer;padding:2px 0;margin-bottom:18px}
   .map-ph{aspect-ratio:16/10;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);margin-bottom:18px}
   .map-ph iframe{width:100%;height:100%;border:0;display:block}
-  /* 교체: .map-ph 자리에 정적 지도 이미지(<img loading="lazy">) 또는 네이버/카카오 지도 iframe */
 
-  /* ===== 메뉴 ===== */
+  /* 메뉴 */
   .menu-card{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);
     padding:6px 20px;box-shadow:0 8px 26px -20px rgba(33,26,20,.6)}
-  .mrow{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
-    padding:15px 0;border-bottom:1px solid var(--line)}
+  .mrow{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
   .mrow:last-child{border-bottom:none}
   .mrow .name{font-size:15px;font-weight:600}
   .mrow .name small{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-top:3px}
   .mrow .price{font-family:var(--serif);font-weight:800;color:var(--gold-2);white-space:nowrap;font-size:16px}
   .menu-note{font-size:12px;color:var(--muted);margin:16px 2px 18px;line-height:1.6}
 
-  /* ===== 갤러리 ===== */
+  /* 갤러리 */
   .gallery{display:flex;gap:11px;overflow-x:auto;scroll-snap-type:x mandatory;
     padding:2px 24px 8px;margin:0 -24px;-webkit-overflow-scrolling:touch}
   .gallery::-webkit-scrollbar{height:0}
   .gallery figure{flex:0 0 74%;scroll-snap-align:center;aspect-ratio:4/3;border-radius:var(--radius);
-    overflow:hidden;border:1px solid var(--line);position:relative;
-    background:linear-gradient(150deg,#2B2018,#3A2A1B);
+    overflow:hidden;border:1px solid var(--line);position:relative;background:linear-gradient(150deg,#2B2018,#3A2A1B);
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:rgba(200,150,42,.85)}
   .gallery figure .ico{font-size:30px}
   .gallery figure span{font-size:12px;font-weight:600;letter-spacing:.05em}
@@ -163,12 +143,11 @@
     .gallery{display:grid;grid-template-columns:1fr 1fr;overflow:visible;margin:0;padding:0}
     .gallery figure{flex:none}
   }
-  /* 교체: 각 figure 안을 <img src="사진.jpg" loading="lazy" alt="설명"> 로 교체 */
 
-  /* ===== 예약 & 문의 ===== */
+  /* 예약 & 문의 */
   .contact-list{display:flex;flex-direction:column;gap:11px}
 
-  /* ===== 푸터 (다크) ===== */
+  /* 푸터 */
   footer{background:var(--espresso);color:var(--on-dark);padding:46px 24px 44px;text-align:center}
   footer .fm{font-family:var(--serif);font-size:26px;font-weight:800;letter-spacing:.06em;color:#F3ECDD;margin-bottom:6px}
   footer .frule{width:34px;height:1px;background:rgba(200,150,42,.6);margin:14px auto 16px}
@@ -179,10 +158,9 @@
   .sns a{width:44px;height:44px;border-radius:50%;border:1px solid rgba(200,150,42,.4);
     display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:20px}
 
-  /* ===== 고정 하단 바 ===== */
+  /* 고정 하단 바 */
   .dock{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(33,26,20,.97);
-    backdrop-filter:blur(10px);border-top:1px solid rgba(200,150,42,.28);
-    padding-bottom:env(safe-area-inset-bottom)}
+    backdrop-filter:blur(10px);border-top:1px solid rgba(200,150,42,.28);padding-bottom:env(safe-area-inset-bottom)}
   .dock-inner{max-width:480px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr}
   .dock a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     height:var(--dock-h);font-size:11.5px;font-weight:700;color:var(--on-dark)}
@@ -195,7 +173,15 @@
 </head>
 <body>
 
-<!-- 아이콘 스프라이트 (라인 아이콘) -->
+<!-- 언어 선택 -->
+<div class="langbar" id="langbar" aria-label="Language">
+  <button type="button" data-lang="ko" class="active">한</button>
+  <button type="button" data-lang="en">EN</button>
+  <button type="button" data-lang="ja">日</button>
+  <button type="button" data-lang="zh">中</button>
+</div>
+
+<!-- 아이콘 스프라이트 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="ic-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5Z"/></symbol>
   <symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
@@ -214,116 +200,110 @@
   <!-- ① 히어로 -->
   <section class="hero photo" id="top">
     <div class="hero-media" aria-hidden="true">
-      <!-- 교체: 메인 배경 영상 (hero.mp4). 사진으로 바꾸려면 video 대신 <img src="hero.jpg" alt=""> -->
+      <!-- 교체: 메인 배경 영상 (hero.mp4) -->
       <video src="hero.mp4" autoplay muted loop playsinline preload="metadata"></video>
     </div>
     <div class="hero-inner">
-      <span class="badge">제주 봉개동 현지인 제주 돼지구이 맛집!!</span>
+      <span class="badge" data-i18n="hero_badge">제주 봉개동 현지인 제주 돼지구이 맛집!!</span>
       <img class="hero-logo" src="logo.png" alt="봉도니" onerror="this.remove();var w=document.getElementById('wmText');if(w)w.hidden=false" />
-      <h1 class="wordmark" id="wmText" hidden>봉도니</h1>
+      <h1 class="wordmark" id="wmText" data-i18n="brand" hidden>봉도니</h1>
       <span class="rule"></span>
-      <p class="tagline">감귤밭 옆, 제주 현지인이<br />가는 제주 돼지구이 전문점</p>
+      <p class="tagline" data-i18n-html="hero_tagline">감귤밭 옆, 제주 현지인이<br />가는 제주 돼지구이 전문점</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" id="heroBook" href="#contact">예약하기</a>
-        <a class="btn btn-ghost" href="#location">길찾기</a>
+        <a class="btn btn-primary" id="heroBook" href="#contact" data-i18n="btn_reserve">예약하기</a>
+        <a class="btn btn-ghost" href="#location" data-i18n="btn_directions">길찾기</a>
       </div>
     </div>
-    <a class="scroll-cue" href="#about" aria-label="아래로 스크롤">⌄</a>
+    <a class="scroll-cue" href="#about" aria-label="scroll">⌄</a>
   </section>
 
   <!-- ② 식당 소개 -->
   <section id="about">
-    <span class="eyebrow">소개</span>
-    <h2 class="sec-title">감귤밭 곁,<br />천천히 즐기는 한 끼</h2>
-    <p class="lead">
-      감귤밭을 곁에 둔 봉개동 현지인 돼지고기 전문점 봉도니입니다. 엄선된 제주산 오겹살·목살·생갈비·양념갈비를
-      2번 숙성하여 고객님께 항상 최상의 맛을 제공합니다. 흑돼지 가브리살·항정살도 준비되어 있어
-      부드러운 마블링과 쫄깃한 식감 또한 즐기실 수 있습니다. 주차가 넉넉해(20대 이상)
-      가족·단체·골프 모임도 편하게 오실 수 있습니다. 뒤편 감귤밭을 보며 천천히 즐기는 제주의 한 끼.
-    </p>
+    <span class="eyebrow" data-i18n="eb_about">소개</span>
+    <h2 class="sec-title" data-i18n-html="about_title">감귤밭 곁,<br />천천히 즐기는 한 끼</h2>
+    <p class="lead" data-i18n="about_body">감귤밭을 곁에 둔 봉개동 현지인 돼지고기 전문점 봉도니입니다. 엄선된 제주산 오겹살·목살·생갈비·양념갈비를 2번 숙성하여 고객님께 항상 최상의 맛을 제공합니다. 흑돼지 가브리살·항정살도 준비되어 있어 부드러운 마블링과 쫄깃한 식감 또한 즐기실 수 있습니다. 주차가 넉넉해(20대 이상) 가족·단체·골프 모임도 편하게 오실 수 있습니다. 뒤편 감귤밭을 보며 천천히 즐기는 제주의 한 끼.</p>
     <div class="points">
-      <div class="point"><svg class="ico"><use href="#ic-flame"/></svg><b>제주산 고기<br />흑돼지 특수부위</b></div>
-      <div class="point"><svg class="ico"><use href="#ic-sun"/></svg><b>감귤밭 뷰</b></div>
-      <div class="point"><svg class="ico"><use href="#ic-heart"/></svg><b>친절한<br />현지인 맛집</b></div>
-      <div class="point"><svg class="ico"><use href="#ic-parking"/></svg><b>주차 20대 이상</b></div>
+      <div class="point"><svg class="ico"><use href="#ic-flame"/></svg><b data-i18n-html="pt_meat">제주산 고기<br />흑돼지 특수부위</b></div>
+      <div class="point"><svg class="ico"><use href="#ic-sun"/></svg><b data-i18n="pt_view">감귤밭 뷰</b></div>
+      <div class="point"><svg class="ico"><use href="#ic-heart"/></svg><b data-i18n-html="pt_friendly">친절한<br />현지인 맛집</b></div>
+      <div class="point"><svg class="ico"><use href="#ic-parking"/></svg><b data-i18n="pt_parking">주차 20대 이상</b></div>
     </div>
   </section>
 
   <!-- ③ 위치 & 찾아오는 길 -->
   <section id="location">
-    <span class="eyebrow">오시는 길</span>
-    <h2 class="sec-title">위치 &amp; 찾아오는 길</h2>
-    <p class="addr">제주 제주시 번영로 589 1층</p>
-    <p class="addr-sub">(봉개동 1433-9) · 번영로 따라 봉개동 방향, 식당 뒤 주차장 20대 이상</p>
-    <button class="copy-addr" id="copyAddr" type="button"><svg class="ico"><use href="#ic-copy"/></svg>주소 복사하기</button>
-    <div class="map-ph"><iframe src="https://maps.google.com/maps?q=제주+제주시+번영로+589+봉도니&hl=ko&z=16&output=embed" title="봉도니 위치 지도" loading="lazy" allowfullscreen></iframe></div>
-    <div class="btn-row">
-      <a class="btn btn-soft" id="navKakao" href="#" target="_blank" rel="noopener">카카오내비</a>
-      <a class="btn btn-soft" id="navNaver" href="#" target="_blank" rel="noopener">네이버지도</a>
-      <a class="btn btn-soft" id="navTmap" href="#" target="_blank" rel="noopener">Tmap</a>
+    <span class="eyebrow" data-i18n="eb_location">오시는 길</span>
+    <h2 class="sec-title" data-i18n="location_title">위치 &amp; 찾아오는 길</h2>
+    <p class="addr" data-i18n="addr">제주 제주시 번영로 589 1층</p>
+    <p class="addr-sub" data-i18n="addr_sub">(봉개동 1433-9) · 번영로 따라 봉개동 방향, 식당 뒤 주차장 20대 이상</p>
+    <button class="copy-addr" id="copyAddr" type="button"><svg class="ico"><use href="#ic-copy"/></svg><span id="copyLabel" data-i18n="btn_copyaddr">주소 복사하기</span></button>
+    <div class="map-ph"><iframe src="https://maps.google.com/maps?q=제주+제주시+번영로+589+봉도니&z=16&output=embed" title="봉도니 위치 지도" loading="lazy" allowfullscreen></iframe></div>
+    <div class="nav-grid">
+      <a class="btn btn-soft" id="navGoogle" href="https://www.google.com/maps/dir/?api=1&destination=봉도니+제주+제주시+번영로+589" target="_blank" rel="noopener" data-i18n="nav_google">Google Maps</a>
+      <a class="btn btn-soft" id="navKakao" href="#" target="_blank" rel="noopener" data-i18n="nav_kakao">카카오내비</a>
+      <a class="btn btn-soft" id="navNaver" href="#" target="_blank" rel="noopener" data-i18n="nav_naver">네이버지도</a>
+      <a class="btn btn-soft" id="navTmap" href="#" target="_blank" rel="noopener" data-i18n="nav_tmap">Tmap</a>
     </div>
   </section>
 
   <!-- ④ 메뉴 -->
   <section id="menu">
-    <span class="eyebrow">대표 메뉴</span>
-    <h2 class="sec-title">메뉴 하이라이트</h2>
+    <span class="eyebrow" data-i18n="eb_menu">대표 메뉴</span>
+    <h2 class="sec-title" data-i18n="menu_title">메뉴 하이라이트</h2>
     <div class="menu-card">
-      <div class="mrow"><span class="name">모둠구이</span><span class="price">대 63,000 / 소 49,000</span></div>
-      <div class="mrow"><span class="name">제주산 오겹살·목살·생갈비·양념갈비</span><span class="price">각 17,000</span></div>
-      <div class="mrow"><span class="name">흑돼지 가브리살·항정살 <small>특수부위 · 각 200g</small></span><span class="price">19,000</span></div>
-      <div class="mrow"><span class="name">냉면</span><span class="price">7,000</span></div>
-      <div class="mrow"><span class="name">된장찌개</span><span class="price">4,000</span></div>
+      <div class="mrow"><span class="name" data-i18n="m_assort">모둠구이</span><span class="price" data-i18n="m_assort_price">대 63,000 / 소 49,000</span></div>
+      <div class="mrow"><span class="name" data-i18n="m_pork">제주산 오겹살·목살·생갈비·양념갈비</span><span class="price" data-i18n="m_pork_price">각 17,000</span></div>
+      <div class="mrow"><span class="name"><span data-i18n="m_blackpork">흑돼지 가브리살·항정살</span> <small data-i18n="m_blackpork_sub">특수부위 · 각 200g</small></span><span class="price">19,000</span></div>
+      <div class="mrow"><span class="name" data-i18n="m_naeng">냉면</span><span class="price">7,000</span></div>
+      <div class="mrow"><span class="name" data-i18n="m_doenjang">된장찌개</span><span class="price">4,000</span></div>
     </div>
-    <p class="menu-note">가격은 변동될 수 있습니다. 전체 메뉴와 최신 정보는 네이버에서 확인해 주시기 바랍니다.</p>
-    <a class="btn btn-outline" id="menuNaver" href="#" target="_blank" rel="noopener">전체 메뉴 보기 → 네이버</a>
+    <p class="menu-note" data-i18n="menu_note">가격은 변동될 수 있습니다. 전체 메뉴와 최신 정보는 네이버에서 확인해 주시기 바랍니다.</p>
+    <a class="btn btn-outline" id="menuNaver" href="#" target="_blank" rel="noopener" data-i18n="btn_fullmenu">전체 메뉴 보기 → 네이버</a>
   </section>
 
   <!-- ⑤ 갤러리 -->
   <section id="gallery">
-    <span class="eyebrow">갤러리</span>
-    <h2 class="sec-title">봉도니의 순간들</h2>
+    <span class="eyebrow" data-i18n="eb_gallery">갤러리</span>
+    <h2 class="sec-title" data-i18n="gallery_title">봉도니의 순간들</h2>
   </section>
-  <!-- 교체: 각 figure 안을 <img src="사진.jpg" loading="lazy" alt="설명"> 로 교체 -->
-  <div class="gallery" aria-label="사진 갤러리">
-    <figure><img src="gallery1.jpg" loading="lazy" alt="해질녘 봉도니 외관과 정원" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span>사진 준비 중</span></figure>
-    <figure><img src="gallery2.jpg" loading="lazy" alt="감귤밭에서 본 봉도니" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span>사진 준비 중</span></figure>
-    <figure><img src="gallery3.jpg" loading="lazy" alt="제주산 모둠구이 한 상" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span>사진 준비 중</span></figure>
-    <figure><img src="gallery4.jpg" loading="lazy" alt="저녁의 봉도니 외관" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span>사진 준비 중</span></figure>
+  <div class="gallery" aria-label="gallery">
+    <figure><img src="gallery1.jpg" loading="lazy" alt="봉도니" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span data-i18n="photo_soon">사진 준비 중</span></figure>
+    <figure><img src="gallery2.jpg" loading="lazy" alt="봉도니" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span data-i18n="photo_soon">사진 준비 중</span></figure>
+    <figure><img src="gallery3.jpg" loading="lazy" alt="봉도니" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span data-i18n="photo_soon">사진 준비 중</span></figure>
+    <figure><img src="gallery4.jpg" loading="lazy" alt="봉도니" onerror="this.style.display='none'" /><svg class="ico"><use href="#ic-camera"/></svg><span data-i18n="photo_soon">사진 준비 중</span></figure>
   </div>
 
   <!-- ⑥ 예약 & 문의 -->
   <section id="contact">
-    <span class="eyebrow">예약 &amp; 문의</span>
-    <h2 class="sec-title">궁금한 점은 편하게 문의해 주십시오</h2>
+    <span class="eyebrow" data-i18n="eb_contact">예약 &amp; 문의</span>
+    <h2 class="sec-title" data-i18n="contact_title">궁금한 점은 편하게 문의해 주십시오</h2>
     <div class="contact-list">
-      <a class="btn btn-primary" id="ctaBooking" href="#" target="_blank" rel="noopener"><svg class="ico"><use href="#ic-calendar"/></svg>네이버 예약</a>
-      <a class="btn btn-outline" id="ctaKakao" href="#" target="_blank" rel="noopener">카카오톡 채널</a>
-      <a class="btn btn-soft" id="ctaTel" href="#"><svg class="ico"><use href="#ic-phone"/></svg>전화하기</a>
+      <a class="btn btn-primary" id="ctaBooking" href="#" target="_blank" rel="noopener"><svg class="ico"><use href="#ic-calendar"/></svg><span data-i18n="btn_naverbook">네이버 예약</span></a>
+      <a class="btn btn-outline" id="ctaKakao" href="#" target="_blank" rel="noopener" data-i18n="btn_kakaotalk">카카오톡 채널</a>
+      <a class="btn btn-soft" id="ctaTel" href="#"><svg class="ico"><use href="#ic-phone"/></svg><span data-i18n="btn_call">전화하기</span></a>
     </div>
   </section>
 
   <!-- ⑦ 푸터 -->
   <footer>
-    <div class="fm">봉도니</div>
+    <div class="fm" data-i18n="brand">봉도니</div>
     <div class="frule"></div>
-    <p class="hours"><b>매일 12:00 – 22:00</b> · 월요일 휴무</p>
+    <p class="hours" data-i18n-html="footer_hours"><b>매일 12:00 – 22:00</b> · 월요일 휴무</p>
     <p id="footTel">전화 0507-1398-6240</p>
-    <p>제주 제주시 번영로 589 1층 (봉개동 1433-9)</p>
+    <p data-i18n="footer_addr">제주 제주시 번영로 589 1층 (봉개동 1433-9)</p>
     <div class="sns">
-      <!-- 교체: 인스타 주소 넣으면 자동 표시 -->
-      <a id="snsInsta" class="hidden" href="#" target="_blank" rel="noopener" aria-label="인스타그램">@</a>
+      <a id="snsInsta" class="hidden" href="#" target="_blank" rel="noopener" aria-label="instagram">@</a>
     </div>
   </footer>
 
 </div>
 
 <!-- ⑧ 고정 하단 바 -->
-<nav class="dock" aria-label="빠른 메뉴">
+<nav class="dock" aria-label="quick menu">
   <div class="dock-inner">
-    <a id="dockTel" href="#"><svg class="ico"><use href="#ic-phone"/></svg>전화</a>
-    <a id="dockBook" class="primary" href="#contact"><svg class="ico"><use href="#ic-calendar"/></svg>예약</a>
-    <a id="dockNav" href="#location"><svg class="ico"><use href="#ic-nav"/></svg>길찾기</a>
+    <a id="dockTel" href="#"><svg class="ico"><use href="#ic-phone"/></svg><span data-i18n="dock_call">전화</span></a>
+    <a id="dockBook" class="primary" href="#contact"><svg class="ico"><use href="#ic-calendar"/></svg><span data-i18n="dock_reserve">예약</span></a>
+    <a id="dockNav" href="#location"><svg class="ico"><use href="#ic-nav"/></svg><span data-i18n="dock_directions">길찾기</span></a>
   </div>
 </nav>
 
@@ -334,17 +314,120 @@
   var PLACE = {
     name: "봉도니",
     tel:  "0507-1398-6240",
-    // 교체: 정확한 위도/경도 (예: lat:"33.4842", lng:"126.6248")
-    //  ⤷ 얻는 법: 카카오맵 → "제주 번영로 589" 검색 → 위치 우클릭 → "좌표 복사"
-    //  ⤷ 비우면 버튼이 주소·이름 검색으로 폴백(목적지 정확), 채우면 턴바이턴.
-    lat: "",
-    lng: "",
+    lat: "", lng: "",
     naverPlace:   "https://map.naver.com/p/entry/place/1228480297",
-    naverBooking: "https://map.naver.com/p/entry/place/1228480297?c=15.00,0,0,0,dh&placePath=/booking?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202606141434&locale=ko&svcName=map_pcv5&entry=bmp",  // 네이버 예약 페이지
-    kakaoChannel: "",  // 교체: http://pf.kakao.com/_xxxxx (비우면 버튼 숨김)
-    instagram:    ""   // 교체: 인스타 URL (비우면 아이콘 숨김)
+    naverBooking: "https://map.naver.com/p/entry/place/1228480297?c=15.00,0,0,0,dh&placePath=/booking?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202606141434&locale=ko&svcName=map_pcv5&entry=bmp",
+    kakaoChannel: "",
+    instagram:    ""
   };
-  /* ===================================== */
+
+  /* ====== 번역 사전 (한국어·English·日本語·中文) — 새 문구는 4개 언어 모두 수정 ====== */
+  var T = {
+    ko:{
+      doc_title:"봉도니 — 감귤밭 옆 제주 현지인 돼지구이 전문점",
+      hero_badge:"제주 봉개동 현지인 제주 돼지구이 맛집!!", brand:"봉도니",
+      hero_tagline:"감귤밭 옆, 제주 현지인이<br>가는 제주 돼지구이 전문점",
+      btn_reserve:"예약하기", btn_directions:"길찾기",
+      eb_about:"소개", about_title:"감귤밭 곁,<br>천천히 즐기는 한 끼",
+      about_body:"감귤밭을 곁에 둔 봉개동 현지인 돼지고기 전문점 봉도니입니다. 엄선된 제주산 오겹살·목살·생갈비·양념갈비를 2번 숙성하여 고객님께 항상 최상의 맛을 제공합니다. 흑돼지 가브리살·항정살도 준비되어 있어 부드러운 마블링과 쫄깃한 식감 또한 즐기실 수 있습니다. 주차가 넉넉해(20대 이상) 가족·단체·골프 모임도 편하게 오실 수 있습니다. 뒤편 감귤밭을 보며 천천히 즐기는 제주의 한 끼.",
+      pt_meat:"제주산 고기<br>흑돼지 특수부위", pt_view:"감귤밭 뷰", pt_friendly:"친절한<br>현지인 맛집", pt_parking:"주차 20대 이상",
+      eb_location:"오시는 길", location_title:"위치 & 찾아오는 길",
+      addr:"제주 제주시 번영로 589 1층", addr_sub:"(봉개동 1433-9) · 번영로 따라 봉개동 방향, 식당 뒤 주차장 20대 이상",
+      btn_copyaddr:"주소 복사하기", copy_done:"✓ 복사됐어요",
+      nav_google:"구글맵", nav_kakao:"카카오내비", nav_naver:"네이버지도", nav_tmap:"Tmap",
+      eb_menu:"대표 메뉴", menu_title:"메뉴 하이라이트",
+      m_assort:"모둠구이", m_assort_price:"대 63,000 / 소 49,000",
+      m_pork:"제주산 오겹살·목살·생갈비·양념갈비", m_pork_price:"각 17,000",
+      m_blackpork:"흑돼지 가브리살·항정살", m_blackpork_sub:"특수부위 · 각 200g",
+      m_naeng:"냉면", m_doenjang:"된장찌개",
+      menu_note:"가격은 변동될 수 있습니다. 전체 메뉴와 최신 정보는 네이버에서 확인해 주시기 바랍니다.",
+      btn_fullmenu:"전체 메뉴 보기 → 네이버",
+      eb_gallery:"갤러리", gallery_title:"봉도니의 순간들", photo_soon:"사진 준비 중",
+      eb_contact:"예약 & 문의", contact_title:"궁금한 점은 편하게 문의해 주십시오",
+      btn_naverbook:"네이버 예약", btn_kakaotalk:"카카오톡 채널", btn_call:"전화하기",
+      footer_hours:"<b>매일 12:00 – 22:00</b> · 월요일 휴무", foot_tel_label:"전화",
+      footer_addr:"제주 제주시 번영로 589 1층 (봉개동 1433-9)",
+      dock_call:"전화", dock_reserve:"예약", dock_directions:"길찾기"
+    },
+    en:{
+      doc_title:"Bongdoni — Local Jeju Pork BBQ by the Tangerine Orchard",
+      hero_badge:"Local pork BBQ in Bonggae-dong, Jeju!!", brand:"BONGDONI",
+      hero_tagline:"By the tangerine orchard —<br>where Jeju locals go for pork BBQ",
+      btn_reserve:"Reserve", btn_directions:"Directions",
+      eb_about:"About", about_title:"A relaxed meal<br>beside the orchard",
+      about_body:"Bongdoni is a local pork specialist in Bonggae-dong, set beside a tangerine orchard. We carefully select Jeju pork — pork belly, neck, ribs and marinated ribs — and double-age it for the best flavor. Black-pork special cuts (gabri & hangjeong) offer tender marbling and a satisfying, chewy bite. With plenty of parking (20+ cars), it's easy for families, groups and golf parties. Enjoy a relaxed Jeju meal with the orchard in view.",
+      pt_meat:"Jeju pork &<br>black-pork cuts", pt_view:"Orchard view", pt_friendly:"Friendly<br>local favorite", pt_parking:"Parking 20+ cars",
+      eb_location:"Getting here", location_title:"Location & Directions",
+      addr:"1F, 589 Beonyeong-ro, Jeju-si, Jeju", addr_sub:"(Bonggae-dong 1433-9) · Along Beonyeong-ro toward Bonggae-dong · 20+ parking behind the restaurant",
+      btn_copyaddr:"Copy address", copy_done:"✓ Copied",
+      nav_google:"Google Maps", nav_kakao:"KakaoNavi", nav_naver:"Naver Map", nav_tmap:"Tmap",
+      eb_menu:"Signature", menu_title:"Menu Highlights",
+      m_assort:"Assorted grill", m_assort_price:"L 63,000 / S 49,000",
+      m_pork:"Jeju pork belly · neck · ribs · marinated ribs", m_pork_price:"17,000 each",
+      m_blackpork:"Black-pork gabri & hangjeong", m_blackpork_sub:"Special cuts · 200g each",
+      m_naeng:"Naengmyeon (cold noodles)", m_doenjang:"Doenjang stew",
+      menu_note:"Prices may change. Please check Naver for the full menu and latest info.",
+      btn_fullmenu:"Full menu → Naver",
+      eb_gallery:"Gallery", gallery_title:"Moments at Bongdoni", photo_soon:"Photo coming soon",
+      eb_contact:"Reserve & Contact", contact_title:"Have a question? Feel free to reach out",
+      btn_naverbook:"Naver Booking", btn_kakaotalk:"KakaoTalk Channel", btn_call:"Call",
+      footer_hours:"<b>Daily 12:00 – 22:00</b> · Closed Mondays", foot_tel_label:"Tel",
+      footer_addr:"1F, 589 Beonyeong-ro, Bonggae-dong, Jeju-si, Jeju",
+      dock_call:"Call", dock_reserve:"Reserve", dock_directions:"Directions"
+    },
+    ja:{
+      doc_title:"ボンドニ — みかん畑のそば、済州の地元豚焼肉専門店",
+      hero_badge:"済州・ポンゲ洞の地元豚焼肉店!!", brand:"ボンドニ",
+      hero_tagline:"みかん畑のそば、<br>済州の地元客が通う豚焼肉専門店",
+      btn_reserve:"予約する", btn_directions:"道案内",
+      eb_about:"紹介", about_title:"みかん畑のそばで<br>ゆっくり味わう一食",
+      about_body:"ボンドニは、みかん畑のそばにあるポンゲ洞の地元豚肉専門店です。厳選した済州産の豚バラ・肩ロース・カルビ・味付けカルビを二度熟成させ、いつでも最高の味をお届けします。黒豚の特殊部位(ガブリ・ハンジョン)もご用意し、やわらかな霜降りと弾力ある食感もお楽しみいただけます。駐車場も広く(20台以上)、ご家族・団体・ゴルフの集まりにも気軽にお越しいただけます。みかん畑を眺めながら、ゆっくり味わう済州の一食。",
+      pt_meat:"済州産の肉<br>黒豚の特殊部位", pt_view:"みかん畑ビュー", pt_friendly:"親切な<br>地元の人気店", pt_parking:"駐車20台以上",
+      eb_location:"アクセス", location_title:"場所・アクセス",
+      addr:"済州市 繁栄路589 1階", addr_sub:"(ポンゲ洞 1433-9) · 繁栄路をポンゲ洞方面へ · 店裏に駐車場20台以上",
+      btn_copyaddr:"住所をコピー", copy_done:"✓ コピーしました",
+      nav_google:"Googleマップ", nav_kakao:"KakaoNavi", nav_naver:"Naver地図", nav_tmap:"Tmap",
+      eb_menu:"おすすめ", menu_title:"メニュー",
+      m_assort:"盛り合わせ焼き", m_assort_price:"大 63,000 / 小 49,000",
+      m_pork:"済州産 豚バラ・肩ロース・カルビ・味付カルビ", m_pork_price:"各 17,000",
+      m_blackpork:"黒豚 ガブリ・ハンジョン", m_blackpork_sub:"特殊部位 · 各200g",
+      m_naeng:"冷麺", m_doenjang:"テンジャンチゲ",
+      menu_note:"価格は変更される場合があります。全メニュー・最新情報はNaverでご確認ください。",
+      btn_fullmenu:"全メニュー → Naver",
+      eb_gallery:"ギャラリー", gallery_title:"ボンドニの風景", photo_soon:"写真準備中",
+      eb_contact:"予約・お問い合わせ", contact_title:"ご不明な点はお気軽にお問い合わせください",
+      btn_naverbook:"Naver予約", btn_kakaotalk:"カカオトークチャンネル", btn_call:"電話する",
+      footer_hours:"<b>毎日 12:00 – 22:00</b> · 月曜定休", foot_tel_label:"電話",
+      footer_addr:"済州市 繁栄路589 1階 (ポンゲ洞 1433-9)",
+      dock_call:"電話", dock_reserve:"予約", dock_directions:"道案内"
+    },
+    zh:{
+      doc_title:"棒道尼 — 橘子园旁·济州本地猪肉烧烤专门店",
+      hero_badge:"济州凤盖洞·本地猪肉烧烤名店!!", brand:"棒道尼",
+      hero_tagline:"橘子园旁，<br>济州本地人常去的猪肉烧烤店",
+      btn_reserve:"预约", btn_directions:"导航",
+      eb_about:"介绍", about_title:"橘子园旁，<br>慢慢享用的一餐",
+      about_body:"棒道尼是位于凤盖洞、橘子园旁的本地猪肉专门店。我们严选济州产五花肉·梅花肉·排骨·调味排骨，经过两次熟成，为您呈现一贯的上佳风味。还备有黑猪特殊部位(嘎不里·项颈肉)，可享受柔嫩的雪花纹与弹牙口感。停车宽裕(20辆以上)，家庭·团体·高尔夫聚会都能轻松前来。在后方橘子园的景致中，慢慢享用一顿济州美餐。",
+      pt_meat:"济州猪肉<br>黑猪特殊部位", pt_view:"橘园景观", pt_friendly:"亲切的<br>本地人气店", pt_parking:"停车20辆以上",
+      eb_location:"交通", location_title:"位置与路线",
+      addr:"济州市 繁荣路589 1层", addr_sub:"(凤盖洞 1433-9) · 沿繁荣路往凤盖洞方向 · 店后停车场20辆以上",
+      btn_copyaddr:"复制地址", copy_done:"✓ 已复制",
+      nav_google:"谷歌地图", nav_kakao:"KakaoNavi", nav_naver:"Naver地图", nav_tmap:"Tmap",
+      eb_menu:"招牌", menu_title:"菜单精选",
+      m_assort:"拼盘烧烤", m_assort_price:"大 63,000 / 小 49,000",
+      m_pork:"济州五花·梅花·排骨·调味排骨", m_pork_price:"各 17,000",
+      m_blackpork:"黑猪 嘎不里·项颈肉", m_blackpork_sub:"特殊部位 · 各200g",
+      m_naeng:"冷面", m_doenjang:"大酱汤",
+      menu_note:"价格可能变动。完整菜单与最新信息请在Naver确认。",
+      btn_fullmenu:"完整菜单 → Naver",
+      eb_gallery:"图库", gallery_title:"棒道尼的瞬间", photo_soon:"照片准备中",
+      eb_contact:"预约与咨询", contact_title:"如有疑问，欢迎随时咨询",
+      btn_naverbook:"Naver预约", btn_kakaotalk:"KakaoTalk频道", btn_call:"致电",
+      footer_hours:"<b>每日 12:00 – 22:00</b> · 周一休息", foot_tel_label:"电话",
+      footer_addr:"济州市 繁荣路589 1层 (凤盖洞 1433-9)",
+      dock_call:"致电", dock_reserve:"预约", dock_directions:"导航"
+    }
+  };
 
   var enc = encodeURIComponent;
   var hasCoord = !!(PLACE.lat && PLACE.lng);
@@ -359,32 +442,29 @@
   function hide(id){ var el=document.getElementById(id); if(el) el.classList.add("hidden"); }
 
   ["ctaTel","dockTel"].forEach(function(id){ var el=document.getElementById(id); if(el) el.setAttribute("href","tel:"+PLACE.tel); });
-  var fp=document.getElementById("footTel");
-  if(fp) fp.innerHTML='전화 <a href="tel:'+PLACE.tel+'">'+PLACE.tel+'</a>';
 
   setHref("navKakao", kakaoRoute);
   setHref("navNaver", PLACE.naverPlace);
   setHref("navTmap", tmapApp);
   setHref("menuNaver", PLACE.naverPlace);
 
-  // 네이버 예약 — '예약' 버튼(히어로·고정바·문의)을 예약 페이지로 직접 연결(새 탭). 없으면 기존 동작 유지.
   setHref("ctaBooking", PLACE.naverBooking || PLACE.naverPlace);
   if(PLACE.naverBooking){
     ["heroBook","dockBook"].forEach(function(id){ var el=setHref(id, PLACE.naverBooking); if(el) el.target="_blank"; });
   }
-
   if(PLACE.kakaoChannel){ setHref("ctaKakao", PLACE.kakaoChannel); } else { hide("ctaKakao"); }
   if(PLACE.instagram){ var s=setHref("snsInsta", PLACE.instagram); if(s) s.classList.remove("hidden"); }
 
+  // 주소 복사 (항상 한국어 주소 복사 — 내비 앱 호환)
   var addrText="제주 제주시 번영로 589 1층 (봉개동 1433-9)";
-  var cb=document.getElementById("copyAddr");
-  if(cb){ cb.addEventListener("click",function(){
-    function done(){ var html=cb.innerHTML; cb.textContent="✓ 복사됐어요"; setTimeout(function(){cb.innerHTML=html;},1500); }
-    function fb(){ var t=document.createElement("textarea");t.value=addrText;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");done();}catch(e){}document.body.removeChild(t); }
+  var cb=document.getElementById("copyAddr"), clabel=document.getElementById("copyLabel");
+  if(cb&&clabel){ cb.addEventListener("click",function(){
+    function done(){ var t=clabel.textContent; clabel.textContent=(T[curLang]&&T[curLang].copy_done)||"✓"; setTimeout(function(){clabel.textContent=t;},1500); }
+    function fb(){ var x=document.createElement("textarea");x.value=addrText;x.style.position="fixed";x.style.opacity="0";document.body.appendChild(x);x.select();try{document.execCommand("copy");done();}catch(e){}document.body.removeChild(x); }
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(addrText).then(done).catch(fb); } else { fb(); }
   }); }
 
-  // Tmap 딥링크: 앱 열기 시도 → 미설치면 웹 길찾기로 폴백
+  // Tmap 딥링크 → 미설치 시 웹 폴백
   var tb=document.getElementById("navTmap");
   if(tb){ tb.addEventListener("click",function(e){
     e.preventDefault();
@@ -395,6 +475,27 @@
     setTimeout(function(){ document.removeEventListener("visibilitychange",onHide);
       if(!hid && !document.hidden){ window.location.href=fallback; } },1500);
   }); }
+
+  // ====== 다국어 적용 ======
+  var curLang="ko";
+  function applyLang(lang){
+    if(!T[lang]) lang="ko";
+    curLang=lang; var d=T[lang];
+    document.documentElement.lang=lang;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){ var k=el.getAttribute("data-i18n"); if(d[k]!=null) el.textContent=d[k]; });
+    document.querySelectorAll("[data-i18n-html]").forEach(function(el){ var k=el.getAttribute("data-i18n-html"); if(d[k]!=null) el.innerHTML=d[k]; });
+    if(d.doc_title) document.title=d.doc_title;
+    var fp=document.getElementById("footTel"); if(fp) fp.innerHTML=(d.foot_tel_label||"Tel")+' <a href="tel:'+PLACE.tel+'">'+PLACE.tel+'</a>';
+    var lb=document.getElementById("langbar");
+    if(lb) lb.querySelectorAll("button").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-lang")===lang); });
+    try{ localStorage.setItem("bd_lang", lang); }catch(e){}
+  }
+  var saved=null; try{ saved=localStorage.getItem("bd_lang"); }catch(e){}
+  var initLang = saved || (navigator.language||"ko").slice(0,2).toLowerCase();
+  if(!T[initLang]) initLang="ko";
+  applyLang(initLang);
+  var lbar=document.getElementById("langbar");
+  if(lbar){ lbar.querySelectorAll("button").forEach(function(b){ b.addEventListener("click",function(){ applyLang(b.getAttribute("data-lang")); }); }); }
 })();
 </script>
 </body>
